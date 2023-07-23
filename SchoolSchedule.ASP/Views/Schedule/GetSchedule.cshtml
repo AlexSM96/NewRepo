@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "GetSchedule";
+}
+
+<h3 align="center">Школьное расписания</h3>
+
+<br />
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <label class="col-form-label">Класс</label>
+        <select class="form-control mb-3" id="classFilter">
+            <option>10 А</option>
+            <option>10 Б</option>
+            <option>11 А</option>
+            <option>11 Б</option>
+        </select>
+    </div>
+</div>
+
+<div>
+    <table class="table table-striped" id="scheduleTable">
+        <thead>
+            <tr>
+                <th valign="middle">День недели</th>
+                <th valign="middle">Класс</th>
+                <th valign="middle">Номер урока</th>
+                <th valign="middle">Время начала</th>
+                <th valign="middle">Время окончания</th>
+                <th valign="middle">Предмет</th>
+                <th valign="middle">Преподаватель</th>
+                <th valign="middle">Аудитория</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        let dataTable = $('#scheduleTable').DataTable({
+            info: false,
+            serverSide: true,
+            searching: false,
+            paging: true,
+            sorting: false,
+            ajax: {
+                url: '@Url.Action("ScheduleHandler")',
+                method: 'POST',
+                data: { className: $('#classFilter option:selected').val() }
+            },
+            columns: [
+                { data: 'dayWeek' },
+                { data: 'className' },
+                { data: 'lessonNumber' },
+                { data: 'lessonTimeStart' },
+                { data: 'lessonTimeEnd' },
+                { data: 'lessonName' },
+                { data: 'teacherName' },
+                { data: 'classRoom' }
+            ],
+            createdRow: function (nRow, data) {
+                for (var i = 0; i < dataTable.columns().header().length - 1; i++) {
+                    $('td', nRow).eq(i).css('cursor', 'pointer');
+                    $('td', nRow).eq(i).on('click', null);
+                }
+            }
+        });
+
+        $('#classFilter').on('change', function () {
+            dataTable.draw();
+        });
+    </script>
+}
+

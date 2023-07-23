@@ -1,0 +1,104 @@
+﻿@model IEnumerable<SchoolSchedule.DAL.Database.Entities.Lesson>
+@{
+    ViewData["Title"] = "GetLessons";
+    int number = 0;
+}
+
+<h1 align="center">Предметы</h1>
+<br />
+<div class="row">
+    <form class="form-group col-md-6">
+        <div>
+            <label class="form-label">Название предмета</label>
+            <input type="text" class="form-control" id="inputLessonName" />
+        </div>
+        <div>
+            <label class="form-label">Аудитория</label>
+            <select class="form-control mb-3" id="classRoom">
+                @foreach (var classRoom in Model.Select(x => x.ClassRoom).Distinct())
+                {
+                    if (int.TryParse(classRoom, out int result))
+                    {
+                        <option>№ @result</option>
+                    }
+                    else
+                    {
+                        <option>@classRoom</option>
+                    }
+                }
+            </select>
+        </div>
+        <br />
+        <button class="btn btn-primary btn-lg" id="addLesson">Добавить</button>
+    </form>
+
+    <div class="col-md-6">
+        <table class="table table-dark">
+            <thead>
+                <tr align="center">
+                    <th>#</th>
+                    <th>Предмет</th>
+                    <th>Аудитория</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr align="center">
+                        <td>@(++number)</td>
+                        <td>@item.LessonName</td>
+                        <td>@item.ClassRoom</td>
+                        <td>
+                            <div class="col-md-7">
+                                <button class="btn btn-outline-danger" onclick="deleteLesson(@number)">Удалить</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        $('#addLesson').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddLesson", "Lesson")',
+                data: {
+                    lessonName: $('#inputLessonName').val(),
+                    classRoom: $('#classRoom option:selected').val()
+                },
+                success: function (response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.description);
+                }
+            })
+        });
+
+        function deleteLesson(number) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteLesson", "Lesson")',
+                data: {
+                    id: number
+                },
+                success: function (response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.desription);
+                }
+            })
+        }
+    </script>
+}

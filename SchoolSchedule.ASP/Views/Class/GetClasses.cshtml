@@ -1,0 +1,134 @@
+﻿@model IEnumerable<SchoolSchedule.DAL.Database.Entities.Class>
+@{
+    ViewData["Title"] = "GetСlass";
+}
+
+<h1 align="center">Классы</h1>
+<br />
+<div class="row">
+    <br />
+    <form class="form-group col-md-6">
+        <div>
+            <label class="form-label">Номер класса</label>
+            <input type="text" class="form-control" id="inputData" />
+        </div>
+        <br />
+        <button class="btn btn-primary btn-lg" id="addClass">Добавить</button>
+    </form>
+
+    <br />
+
+    <div class="form-group col-md-6">
+        <table class="table table-striped table-dark" id="classTable">
+            <thead>
+                <tr align="center">
+                    <th>ID</th>
+                    <th>Класс</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr align="center">
+                        <td>@item.ClassId</td>
+                        <td>"@item.ClassName"</td>
+                        <td>
+                            <div class="row col-md-10">
+                                <div class="form-group col-md-7">
+                                    <button class="btn btn-outline-warning" onclick="openDialog()">Изменить</button>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <button class="btn btn-outline-danger" onclick="deleteClass(@item.ClassId)">Удалить</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $('#addClass').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddClass", "Class")',
+                data: {
+                    className: $('#inputData').val()
+                },
+                success: function (response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.description);
+                }
+            })
+        });
+
+        function deleteClass(id) {
+            $.ajax({
+                url: '@Url.Action("RemoveClass", "Class")',
+                type: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseJSON.description);
+                }
+            });
+        }
+
+        function openDialog() {
+            teacehrDialog.dialog('open');
+        }
+
+        let teacherDialog = $(`<div id="dialog" title="Редактор названия">
+                                  <form>
+                                    <label for="currentId">Введите текщий ID</label>
+                                    <input type="text" id="currentId">
+                                    <br/>
+                                    <label for="newClassName">Введите новое название класса</label>
+                                    <input type="text" id="newClassName">
+                                  </form>
+                                </div>`).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 500,
+            buttons: {
+                "Сохранить": function () {
+                    $.ajax({
+                        url: '@Url.Action("UpdateClass", "Class")',
+                        type: 'POST',
+                        data: {
+                            model: { className: $('#newClassName').val() },
+                            id: $('#currentId').val()
+                        },
+                        success: function (response) {
+                            alert(response.description);
+                            location.reload();
+                        },
+                        error: function (response) {
+                            alert(response.responseJSON.description);
+                        }
+                    });
+
+                    $(this).dialog("close");
+                },
+                "Отмена": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    </script>
+}
+
