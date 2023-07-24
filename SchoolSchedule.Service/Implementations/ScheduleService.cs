@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SchoolSchedule.DAL.Database.Entities;
-using SchoolSchedule.DAL.Interfaces;
+using SchoolSchedule.DAL.Entities;
+using SchoolSchedule.DAL.Repository.Base;
 using SchoolSchedule.Domain.Extensions;
 using SchoolSchedule.Domain.Filters.Schedule;
 using SchoolSchedule.Domain.Response;

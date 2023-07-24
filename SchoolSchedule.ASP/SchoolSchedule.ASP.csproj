@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SchoolSchedule.DB\SchoolSchedule.DB\SchoolSchedule.DAL.csproj" />
+    <ProjectReference Include="..\..\SchoolSchedule.DAL\SchoolSchedule.DAL\SchoolSchedule.DAL.csproj" />
     <ProjectReference Include="..\SchoolSchedule.Service\SchoolSchedule.Service.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SchoolSchedule.DAL.Database.Context;
-using SchoolSchedule.DAL.Database.Entities;
-using SchoolSchedule.DAL.Interfaces;
-using SchoolSchedule.DAL.Repositories.Base;
+using SchoolSchedule.DAL.Context;
+using SchoolSchedule.DAL.Entities;
+using SchoolSchedule.DAL.Repository.Base;
 using SchoolSchedule.Service.Implementations;
 using SchoolSchedule.Service.Interfaces;
 

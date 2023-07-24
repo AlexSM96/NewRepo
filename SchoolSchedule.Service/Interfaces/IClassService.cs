@@ -1,4 +1,4 @@
-﻿using SchoolSchedule.DAL.Database.Entities;
+﻿using SchoolSchedule.DAL.Entities;
 using SchoolSchedule.Domain.Response;
 using SchoolSchedule.Domain.ViewModels;
 
