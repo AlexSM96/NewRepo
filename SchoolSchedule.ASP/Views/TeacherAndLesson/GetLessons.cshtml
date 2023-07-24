@@ -1,0 +1,17 @@
+﻿@model IEnumerable<SchoolSchedule.DAL.Entities.TeacherAndLesson>
+@{
+    ViewData["Title"] = "GetLessons";
+}
+
+<h3>Список предметов для преподавателя</h3>
+
+<div>
+    <select class="form-select-lg">
+        @foreach (var item in Model)
+        {
+            <option>@item.LessonName</option>
+        }
+    </select>
+    
+</div>
+

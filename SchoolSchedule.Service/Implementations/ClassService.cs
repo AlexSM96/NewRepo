@@ -113,7 +113,7 @@ public class ClassService : IClassService
         {
             return new BaseResponse<Class>
             {
-                Description = $"[Service.Delete] => {e.Message}",
+                Description = $"[Service.DeleteTeacher] => {e.Message}",
                 StatusCode = StatusCode.ServerError
             };
         }

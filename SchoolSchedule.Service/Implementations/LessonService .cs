@@ -118,7 +118,7 @@ public class LessonService : ILessonService
             return new BaseResponse<LessonViewModel>()
             {
                 StatusCode = StatusCode.ServerError,
-                Description = $"[LessonService].[Delete] => {e.Message}"
+                Description = $"[LessonService].[DeleteTeacher] => {e.Message}"
             };
         }
     }

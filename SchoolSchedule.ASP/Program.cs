@@ -15,7 +15,9 @@ void ConfigureServices(WebApplicationBuilder webApplicationBuilder)
         .AddScoped<IBaseRepository<Teacher>, BaseRepository<Teacher>>()
         .AddScoped<ITeacherService, TeacherService>()
         .AddScoped<IBaseRepository<Lesson>, BaseRepository<Lesson>>()
-        .AddScoped<ILessonService, LessonService>();
+        .AddScoped<ILessonService, LessonService>()
+        .AddScoped<IBaseRepository<TeacherAndLesson>, BaseRepository<TeacherAndLesson>>()
+        .AddScoped<ITeacherAndLessonService, TeacherAndLessonService>();
 
 }
 

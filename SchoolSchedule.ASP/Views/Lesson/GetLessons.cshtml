@@ -35,28 +35,28 @@
     <div class="col-md-6">
         <table class="table table-dark">
             <thead>
-                <tr align="center">
-                    <th>#</th>
-                    <th>Предмет</th>
-                    <th>Аудитория</th>
-                    <th>Действие</th>
-                </tr>
+            <tr align="center">
+                <th>#</th>
+                <th>Предмет</th>
+                <th>Аудитория</th>
+                <th>Действие</th>
+            </tr>
             </thead>
             <tbody>
 
-                @foreach (var item in Model)
-                {
-                    <tr align="center">
-                        <td>@(++number)</td>
-                        <td>@item.LessonName</td>
-                        <td>@item.ClassRoom</td>
-                        <td>
-                            <div class="col-md-7">
-                                <button class="btn btn-outline-danger" onclick="deleteLesson(@number)">Удалить</button>
-                            </div>
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in Model)
+            {
+                <tr align="center">
+                    <td>@(++number)</td>
+                    <td>@item.LessonName</td>
+                    <td>@item.ClassRoom</td>
+                    <td>
+                        <div class="col-md-7">
+                            <button class="btn btn-outline-danger" onclick="deleteLesson(@number)">Удалить</button>
+                        </div>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
