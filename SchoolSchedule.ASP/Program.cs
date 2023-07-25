@@ -50,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Schedule}/{action=GetSchedule}/{id?}");
+    pattern: "{controller=Schedule}/{action=GetSchedules}/{id?}");
 
 app.Run();

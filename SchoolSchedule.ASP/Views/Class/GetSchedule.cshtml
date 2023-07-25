@@ -1,0 +1,89 @@
+﻿@model SchoolSchedule.DAL.Entities.Class
+@{
+    ViewData["Title"] = "GetSchedule";
+    int countRow = 0;
+}
+
+<h3 align="center">Расписание - "@Model.ClassName"</h3>
+<br/>
+<div class="col-md-12" align="center">
+    <table class="table table-dark table-hover">
+        <thead>
+        <tr align="center">
+            <th>День недели</th>
+            <th>Номер урока</th>
+            <th>Время начала</th>
+            <th>Время окончания</th>
+            <th>Предмет</th>
+            <th>Преподаватель</th>
+            <th>Аудитория</th>
+            <th style="width:260px">Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Schedules)
+        {
+            <tr align="center">
+                <td>@item.WeekDayNavigation?.WeekDayName</td>
+                <td>@item.LessonNumber</td>
+                <td>@item.LessonNumberNavigation?.LessonTimeStart</td>
+                <td>@item.LessonNumberNavigation?.LessonTimeEnd</td>
+                <td>@item.LessonName</td>
+                <td>@item.TeacherAndLesson?.Teacher?.FullName</td>
+                <td>@item.TeacherAndLesson?.LessonNameNavigation?.ClassRoom</td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-warning"
+                                    title="Редактировать расписание">Изменить</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-danger" 
+                                    onclick="deleteSchedule('@item.WeekDay','@item.ClassId','@item.LessonNumber','@item.TeacherId','@item.LessonName')" 
+                                    title="Удалить ряд">Удалить</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            countRow++;
+        }
+        @{
+            if (countRow < 36)
+            {
+                <tr align="center">
+                    <th colspan="8">
+                        <button class="btn btn-primary btn-lg" title="Добавить новые данные">Добавить</button>
+                    </th>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script>
+        function deleteSchedule(weekDay,classId,lessonNumber,teacherId,lessonName) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RemoveSchedule","Schedule")',
+                data: {
+                    weekDay,
+                    classId,
+                    lessonNumber,
+                    teacherId,
+                    lessonName
+                },
+                success: function(response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function(response) {
+                    alert(response.responseJSON.description);
+                }
+            });
+        }
+    </script>
+}
+

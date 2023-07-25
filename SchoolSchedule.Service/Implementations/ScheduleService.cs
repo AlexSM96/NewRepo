@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolSchedule.DAL.Entities;
 using SchoolSchedule.DAL.Repository.Base;
+using SchoolSchedule.Domain.Enum;
 using SchoolSchedule.Domain.Extensions;
 using SchoolSchedule.Domain.Filters.Schedule;
 using SchoolSchedule.Domain.Response;
@@ -16,6 +17,18 @@ public class ScheduleService : IScheduleService
     public ScheduleService(IBaseRepository<Schedule> scheduleRepository)
     {
         _scheduleRepository = scheduleRepository;
+    }
+
+    private async Task<List<Schedule>> GetFullSchedule(ScheduleFilter filter)
+    {
+        return await _scheduleRepository.GetAll()
+            .Include(x => x.WeekDayNavigation)
+            .Include(x => x.LessonNumberNavigation)
+            .Include(x => x.TeacherAndLesson.Teacher)
+            .Include(x => x.TeacherAndLesson.LessonNameNavigation)
+            .Include(x => x.Class)
+            .WhereIf(!string.IsNullOrWhiteSpace(filter.ClassName), x => x.Class.ClassName == filter.ClassName)
+            .ToListAsync();
     }
 
     public async Task<DataTableResult<IEnumerable<ScheduleViewModel>>> GetSchedules(ScheduleFilter filter)
@@ -56,15 +69,87 @@ public class ScheduleService : IScheduleService
         }
     }
 
-    private async Task<List<Schedule>> GetFullSchedule(ScheduleFilter filter)
+    public async Task<IBaseResponse<ScheduleEditViewModel>> CreateOneDay(ScheduleEditViewModel model)
     {
-        return await _scheduleRepository.GetAll()
-            .Include(x => x.WeekDayNavigation)
-            .Include(x => x.LessonNumberNavigation)
-            .Include(x => x.TeacherAndLesson.Teacher)
-            .Include(x => x.TeacherAndLesson.LessonNameNavigation)
-            .Include(x => x.Class)
-            .WhereIf(!string.IsNullOrWhiteSpace(filter.ClassName), x => x.Class.ClassName == filter.ClassName)
-            .ToListAsync();
+        try
+        {
+            var schedule = await _scheduleRepository.GetAll()
+                .FirstOrDefaultAsync(x => x.WeekDay == model.WeekDay 
+                                          && x.ClassId == model.ClassId
+                                          && x.LessonNumber == model.LessonNumber 
+                                          && x.TeacherId == model.TeacherId);
+            if (schedule != null)
+            {
+                return new BaseResponse<ScheduleEditViewModel>
+                {
+                    StatusCode = StatusCode.HasAlready,
+                    Description = "This time-slot is already taken"
+                };
+            }
+
+            schedule = new Schedule()
+            {
+                WeekDay = model.WeekDay,
+                ClassId = model.ClassId,
+                LessonNumber = (byte)model.LessonNumber,
+                LessonName = model.LessonName,
+                TeacherId = (byte)model.TeacherId
+            };
+
+            await _scheduleRepository.CreateAsync(schedule);
+            return new BaseResponse<ScheduleEditViewModel>
+            {
+                StatusCode = StatusCode.OK,
+                Description = "You add new schedule day"
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<ScheduleEditViewModel>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"[ScheduleService.CreateOneDay] => {e.Message}"
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<ScheduleEditViewModel>> DeleteOneDay(ScheduleEditViewModel model)
+    {
+        try
+        {
+            var schedule = await _scheduleRepository.GetAll()
+                .FirstOrDefaultAsync(x => x.WeekDay == model.WeekDay
+                                          && x.ClassId == model.ClassId
+                                          && x.LessonNumber == model.LessonNumber
+                                          && x.TeacherId == model.TeacherId);
+            if (schedule == null)
+            {
+                return new BaseResponse<ScheduleEditViewModel>
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Schedule not found"
+                };
+            }
+
+            await _scheduleRepository.RemoveAsync(schedule);
+            return new BaseResponse<ScheduleEditViewModel>
+            {
+                StatusCode = StatusCode.OK,
+                Description = "You remove schedule day"
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<ScheduleEditViewModel>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"[ScheduleService.DeleteOneDay] => {e.Message}"
+            };
+        }
+    }
+
+    public Task<IBaseResponse<ScheduleEditViewModel>> EditOneDay(ScheduleEditViewModel model)
+    {
+        throw new NotImplementedException();
     }
 }

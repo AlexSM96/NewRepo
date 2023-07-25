@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "GetSchedule";
+    ViewData["Title"] = "GetSchedules";
 }
 
 <h3 align="center">Школьное расписания</h3>
@@ -72,6 +72,7 @@
 
         $('#classFilter').on('change', function () {
             dataTable.draw();
+            dataTable.reload();
         });
     </script>
 }

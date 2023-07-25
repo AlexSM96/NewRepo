@@ -55,4 +55,16 @@ public class ClassController :Controller
 
         return BadRequest(new { Description = response.Description });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetSchedule(int classId)
+    {
+        var response = await _service.GetSchedule(classId);
+        if (response.StatusCode == Domain.Enum.StatusCode.OK)
+        {
+            return View(response.Data);
+        }
+
+        return BadRequest(new { Description = response.Description });
+    }
 }

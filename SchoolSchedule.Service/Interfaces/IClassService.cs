@@ -13,4 +13,6 @@ public interface IClassService
     public Task<IBaseResponse<Class>> Delete(int id);
 
     public Task<IBaseResponse<ClassViewModel>> UpdateClass(ClassViewModel model, int id);
+
+    public Task<IBaseResponse<Class>> GetSchedule(int classId);
 }

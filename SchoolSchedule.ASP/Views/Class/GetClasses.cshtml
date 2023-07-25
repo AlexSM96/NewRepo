@@ -24,6 +24,7 @@
                 <tr align="center">
                     <th>ID</th>
                     <th>Класс</th>
+                    <th>Расписание</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -33,6 +34,9 @@
                     <tr align="center">
                         <td>@item.ClassId</td>
                         <td>"@item.ClassName"</td>
+                        <td>
+                            <a asp-controller="Class" asp-action="GetSchedule" asp-route-classId="@item.ClassId" class="btn btn-outline-info" title="Открыть расписание">Открыть расписание</a>
+                        </td>
                         <td>
                             <div class="row col-md-10">
                                 <div class="form-group col-md-7">
@@ -93,14 +97,14 @@
         }
 
         let teacherDialog = $(`<div id="dialog" title="Редактор названия">
-                                  <form>
-                                    <label for="currentId">Введите текщий ID</label>
-                                    <input type="text" id="currentId">
-                                    <br/>
-                                    <label for="newClassName">Введите новое название класса</label>
-                                    <input type="text" id="newClassName">
-                                  </form>
-                                </div>`).dialog({
+                                          <form>
+                                            <label for="currentId">Введите текщий ID</label>
+                                            <input type="text" id="currentId">
+                                            <br/>
+                                            <label for="newClassName">Введите новое название класса</label>
+                                            <input type="text" id="newClassName">
+                                          </form>
+                                        </div>`).dialog({
             autoOpen: false,
             modal: true,
             width: 500,

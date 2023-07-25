@@ -151,4 +151,46 @@ public class ClassService : IClassService
             };
         }
     }
+
+    public async Task<IBaseResponse<Class>> GetSchedule(int classId)
+    {
+        try
+        {
+            var lessonNumber =  _classRepository.GetAll()
+                .Include(x => x.Schedules)
+                .ThenInclude(x=>x.LessonNumberNavigation);
+
+            var lessonName =  lessonNumber.Include(x => x.Schedules)
+                .ThenInclude(x=>x.TeacherAndLesson.LessonNameNavigation);
+
+            var weekDay = lessonName.Include(x => x.Schedules).ThenInclude(x => x.WeekDayNavigation);
+
+            var classSchedule = await weekDay.Include(x => x.Schedules)
+                .ThenInclude(x => x.TeacherAndLesson.Teacher)
+                .FirstOrDefaultAsync(x=>x.ClassId == classId);
+
+            if (classSchedule == null)
+            {
+                return new BaseResponse<Class>()
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Class is not found"
+                };
+            }
+
+            return new BaseResponse<Class>()
+            {
+                Data = classSchedule,
+                StatusCode = StatusCode.OK,
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<Class>
+            {
+                Description = $"[ClassService.GetSchedule] => {e.Message}",
+                StatusCode = StatusCode.ServerError
+            };
+        }
+    }
 }
