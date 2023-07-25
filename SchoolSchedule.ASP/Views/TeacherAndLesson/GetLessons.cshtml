@@ -1,17 +1,89 @@
 ﻿@model IEnumerable<SchoolSchedule.DAL.Entities.TeacherAndLesson>
 @{
     ViewData["Title"] = "GetLessons";
+    var teacherId = Model.Select(x => x.Teacher.Id).FirstOrDefault();
+    var teacherName = @Model.Select(x => x.Teacher.FullName).FirstOrDefault();
 }
 
-<h3>Список предметов для преподавателя</h3>
-
-<div>
-    <select class="form-select-lg">
-        @foreach (var item in Model)
-        {
-            <option>@item.LessonName</option>
-        }
-    </select>
-    
+<div class="row">
+    <form class="form-group col-md-8">
+        <div>
+            <label class="form-label">Предмет</label>
+            <input type="text" class="form-control" id="inputLessonName" title="Введите название предмета" />
+        </div>
+        <br />
+        <button class="btn btn-primary btn-lg" id="addLessonForTeacher">Добавить новый предмет</button>
+    </form>
+    <div class="row row-cols-1 col-md-4 text-center">
+        <div class="col" style="">
+            <div class="card">
+                <img src="https://img.icons8.com/?size=512&id=txBk3oMCEcE1&format=png"
+                     class="card-img-top" width="50" height="250" alt="@teacherName" title="@teacherName"/>
+                <div class="col-md-12">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@teacherName преподаёт:</h5>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in Model)
+                            {
+                                <li class="list-group-item list-group-item-info">
+                                    <div class="row">
+                                        <div class="col-md-6">@item.LessonName</div>
+                                        <div class="col-md-6"><button class="btn btn-outline-danger" onclick="deletePair('@teacherId', '@item.LessonName')">Удалить</button></div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        $('#addLessonForTeacher').on('click', function(){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreatePair")',
+                data: {
+                    teacherId: @teacherId,
+                    lessonName: $('#inputLessonName').val()
+                },
+                success: function(response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function(response) {
+                    alert(response.responseJSON.description);
+                }
+            })
+        });
+
+        function deletePair(teacherId, lessonName) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeletePair")',
+                data: {
+                    teacherId,
+                    lessonName
+                },
+                success: function(response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function(response) {
+                    alert(response.responseJSON.description);
+                }
+            })
+        }
+    </script>
+}
+
+
+
+
+
+
 
