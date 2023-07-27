@@ -17,7 +17,7 @@
             <th>Предмет</th>
             <th>Преподаватель</th>
             <th>Аудитория</th>
-            <th style="width:260px">Действие</th>
+            <th>Действие</th>
         </tr>
         </thead>
         <tbody>
@@ -32,16 +32,10 @@
                 <td>@item.TeacherAndLesson?.Teacher?.FullName</td>
                 <td>@item.TeacherAndLesson?.LessonNameNavigation?.ClassRoom</td>
                 <td>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-warning"
-                                    title="Редактировать расписание">Изменить</button>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-danger" 
-                                    onclick="deleteSchedule('@item.WeekDay','@item.ClassId','@item.LessonNumber','@item.TeacherId','@item.LessonName')" 
-                                    title="Удалить ряд">Удалить</button>
-                        </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-outline-danger" 
+                                onclick="deleteSchedule('@item.WeekDay','@item.ClassId','@item.LessonNumber','@item.TeacherId','@item.LessonName')" 
+                                title="Удалить ряд">Удалить</button>
                     </div>
                 </td>
             </tr>
@@ -52,7 +46,7 @@
             {
                 <tr align="center">
                     <th colspan="8">
-                        <button class="btn btn-primary btn-lg" title="Добавить новые данные">Добавить</button>
+                            <button class="btn btn-primary btn-lg" onclick="openDialog()" title="Добавить новые данные">Добавить</button>
                     </th>
                 </tr>
             }
@@ -84,6 +78,56 @@
                 }
             });
         }
+        
+        function openDialog(){
+            scheduleDialog.dialog('open');
+        }
+
+        let scheduleDialog = $(`<div id="dialog" title="Добавить расписание">
+                                  <form class="form-group col-md-6">
+                                    <label class="form-label" for="weekDay">День недели</label>
+                                    <input class="form-control" type="text" id="weekDay">
+                                    <br/>
+                                    <label class="form-label" for="lessonNumber">Номер урока</label>
+                                    <input class="form-control" type="text" id="lessonNumber">
+                                    <br/>
+                                    <label class="form-label" for="teacherName">Преподаватель</label>
+                                    <input class="form-control" type="text" id="teacherName">
+                                    <br/>
+                                    <label class="form-label" for="lessonName">Предмет</label>
+                                    <input class="form-control" type="text" id="lessonName">
+                                  </form>
+                                </div>`).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 600,
+            buttons: {
+                "Сохранить": function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("CreateSchedule","Schedule")',
+                        data: {
+                            weekDayName: $('#weekDay').val(),
+                            classId: '@Model.ClassId',
+                            lessonNumber: $('#lessonNumber').val(),
+                            teacherName: $('#teacherName').val(),
+                            lessonName: $('#lessonName').val()
+                        },
+                        success: function (response) {
+                            alert(response.description);
+                            location.reload();
+                        },
+                        error: function (response) {
+                            alert(response.responseJSON.description);
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                "Отмена": function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
     </script>
 }
 

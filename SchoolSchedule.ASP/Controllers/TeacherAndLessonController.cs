@@ -14,15 +14,15 @@ public class TeacherAndLessonController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLessons(int id)
+    public async Task<IActionResult> GetTeacher(int id, bool isJson)
     {
-        var response = await _service.GetLessons(id);
-        if (response.StatusCode == Domain.Enum.StatusCode.OK)
+        var response = await _service.GetTeacher(id);
+        if (isJson)
         {
-            return View(response.Data);
+            return Json(response.Data);
         }
 
-        return BadRequest(new {Description = response.Description});
+        return PartialView("GetTeacher", response.Data);
     }
 
     [HttpPost]

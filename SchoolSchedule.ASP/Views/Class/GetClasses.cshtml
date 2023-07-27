@@ -10,7 +10,7 @@
     <form class="form-group col-md-6">
         <div>
             <label class="form-label">Номер класса</label>
-            <input type="text" class="form-control" id="inputData" />
+            <input type="text" class="form-control" id="inputData"/>
         </div>
         <br />
         <button class="btn btn-primary btn-lg" id="addClass">Добавить</button>
@@ -56,8 +56,7 @@
 
 
 @section Scripts
-    {
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{
     <script>
         $('#addClass').on('click', function (e) {
             e.preventDefault();
@@ -77,11 +76,11 @@
             })
         });
 
-        function deleteClass(id) {
+        function deleteClass(teacherId) {
             $.ajax({
                 url: '@Url.Action("RemoveClass", "Class")',
                 type: 'POST',
-                data: { id: id },
+                data: { teacherId: teacherId },
                 success: function (response) {
                     alert(response.description);
                     location.reload();
@@ -93,29 +92,29 @@
         }
 
         function openDialog() {
-            teacehrDialog.dialog('open');
+            teacherDialog.dialog('open');
         }
 
         let teacherDialog = $(`<div id="dialog" title="Редактор названия">
-                                          <form>
-                                            <label for="currentId">Введите текщий ID</label>
-                                            <input type="text" id="currentId">
+                                          <form class="form-group col-md-6">
+                                            <label class="form-label" for="currentId">Введите текщий ID</label>
+                                            <input class="form-control" type="text" id="currentId">
                                             <br/>
-                                            <label for="newClassName">Введите новое название класса</label>
-                                            <input type="text" id="newClassName">
+                                            <label class="form-label" for="newClassName">Введите новое название класса</label>
+                                            <input class="form-control" type="text" id="newClassName">
                                           </form>
                                         </div>`).dialog({
             autoOpen: false,
             modal: true,
-            width: 500,
+            width: 600,
             buttons: {
-                "Сохранить": function () {
+                "Сохранить": function() {
                     $.ajax({
                         url: '@Url.Action("UpdateClass", "Class")',
                         type: 'POST',
                         data: {
                             model: { className: $('#newClassName').val() },
-                            id: $('#currentId').val()
+                            teacherId: $('#currentId').val()
                         },
                         success: function (response) {
                             alert(response.description);

@@ -31,6 +31,19 @@ public class ScheduleService : IScheduleService
             .ToListAsync();
     }
 
+    private async Task ChangeModelData(ScheduleEditViewModel model)
+    {
+        model.WeekDay = await _scheduleRepository.GetAll()
+            .Where(x => x.WeekDayNavigation.WeekDayName == model.WeekDayName)
+            .Select(x => x.WeekDay)
+            .FirstOrDefaultAsync();
+
+        model.TeacherId = await _scheduleRepository.GetAll()
+            .Where(x => x.TeacherAndLesson.Teacher.FullName == model.TeacherName)
+            .Select(x => x.TeacherId)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<DataTableResult<IEnumerable<ScheduleViewModel>>> GetSchedules(ScheduleFilter filter)
     {
         try
@@ -74,10 +87,10 @@ public class ScheduleService : IScheduleService
         try
         {
             var schedule = await _scheduleRepository.GetAll()
-                .FirstOrDefaultAsync(x => x.WeekDay == model.WeekDay 
-                                          && x.ClassId == model.ClassId
-                                          && x.LessonNumber == model.LessonNumber 
-                                          && x.TeacherId == model.TeacherId);
+                .FirstOrDefaultAsync(x => x.ClassId == model.ClassId
+                                          && x.LessonNumber == model.LessonNumber
+                                          && x.LessonName == model.LessonName);
+
             if (schedule != null)
             {
                 return new BaseResponse<ScheduleEditViewModel>
@@ -87,16 +100,19 @@ public class ScheduleService : IScheduleService
                 };
             }
 
-            schedule = new Schedule()
+            await ChangeModelData(model);
+
+            schedule = new Schedule
             {
                 WeekDay = model.WeekDay,
                 ClassId = model.ClassId,
                 LessonNumber = (byte)model.LessonNumber,
-                LessonName = model.LessonName,
-                TeacherId = (byte)model.TeacherId
+                TeacherId = (byte)model.TeacherId,
+                LessonName = model.LessonName
             };
 
             await _scheduleRepository.CreateAsync(schedule);
+
             return new BaseResponse<ScheduleEditViewModel>
             {
                 StatusCode = StatusCode.OK,
@@ -112,6 +128,7 @@ public class ScheduleService : IScheduleService
             };
         }
     }
+
 
     public async Task<IBaseResponse<ScheduleEditViewModel>> DeleteOneDay(ScheduleEditViewModel model)
     {
@@ -146,10 +163,5 @@ public class ScheduleService : IScheduleService
                 Description = $"[ScheduleService.DeleteOneDay] => {e.Message}"
             };
         }
-    }
-
-    public Task<IBaseResponse<ScheduleEditViewModel>> EditOneDay(ScheduleEditViewModel model)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<SchoolSchedule.DAL.Entities.Lesson>
 @{
-    ViewData["Title"] = "GetLessons";
+    ViewData["Title"] = "GetTeacher";
     int number = 0;
 }
 
@@ -89,7 +89,7 @@
                 type: 'POST',
                 url: '@Url.Action("DeleteLesson", "Lesson")',
                 data: {
-                    id: number
+                    teacherId: number
                 },
                 success: function (response) {
                     alert(response.description);

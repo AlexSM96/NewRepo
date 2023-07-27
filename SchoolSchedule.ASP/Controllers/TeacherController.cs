@@ -33,9 +33,9 @@ public class TeacherController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int teacherId)
     {
-        var response = await _service.Delete(id);
+        var response = await _service.Delete(teacherId);
         if (response.StatusCode == Domain.Enum.StatusCode.OK)
         {
             return Ok(new { Desription = response.Description });

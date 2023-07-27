@@ -43,7 +43,7 @@ public class LessonService : ILessonService
             return new BaseResponse<IEnumerable<Lesson>>()
             {
                 StatusCode = StatusCode.ServerError,
-                Description = $"[LessonService].[GetLessons] => {e.Message}"
+                Description = $"[LessonService].[GetTeacher] => {e.Message}"
             };
         }
     }

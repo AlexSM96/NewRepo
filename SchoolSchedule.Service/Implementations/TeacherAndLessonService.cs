@@ -17,7 +17,7 @@ public class TeacherAndLessonService : ITeacherAndLessonService
         _teacherAndLessonRepository = teacherAndLessonRepository;
     }
 
-    public async Task<IBaseResponse<IEnumerable<TeacherAndLesson>>> GetLessons(int teacherId)
+    public async Task<IBaseResponse<IEnumerable<TeacherAndLesson>>> GetTeacher(int teacherId)
     {
         try
         {
@@ -45,7 +45,7 @@ public class TeacherAndLessonService : ITeacherAndLessonService
             return new BaseResponse<IEnumerable<TeacherAndLesson>>
             {
                 StatusCode = StatusCode.ServerError,
-                Description = $"TeacherAndLessonService.[GetLessons] => {e.Message}"
+                Description = $"TeacherAndLessonService.[GetTeacher] => {e.Message}"
             };
         }
     }

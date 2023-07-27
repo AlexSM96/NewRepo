@@ -1,24 +1,18 @@
 ﻿@model IEnumerable<SchoolSchedule.DAL.Entities.TeacherAndLesson>
 @{
-    ViewData["Title"] = "GetLessons";
+    ViewData["Title"] = "GetTeacher";
     var teacherId = Model.Select(x => x.Teacher.Id).FirstOrDefault();
-    var teacherName = @Model.Select(x => x.Teacher.FullName).FirstOrDefault();
+    var teacherName = Model.Select(x => x.Teacher.FullName).FirstOrDefault();
 }
 
-<div class="row">
-    <form class="form-group col-md-8">
-        <div>
-            <label class="form-label">Предмет</label>
-            <input type="text" class="form-control" id="inputLessonName" title="Введите название предмета" />
-        </div>
-        <br />
-        <button class="btn btn-primary btn-lg" id="addLessonForTeacher">Добавить новый предмет</button>
-    </form>
-    <div class="row row-cols-1 col-md-4 text-center">
+<div class="col-md-12">
+    <div class="row col-md-12 text-center">
         <div class="col" style="">
             <div class="card">
-                <img src="https://img.icons8.com/?size=512&id=txBk3oMCEcE1&format=png"
-                     class="card-img-top" width="50" height="250" alt="@teacherName" title="@teacherName"/>
+                <center class="container">
+                    <img src="https://img.icons8.com/?size=512&id=ZOdk4UpxtfwA&format=png"
+                         class="img-fluid" width="100" alt="@teacherName" title="@teacherName"/>
+                </center>
                 <div class="col-md-12">
                     <div class="card-body">
                         <h5 class="card-title text-center">@teacherName преподаёт:</h5>
@@ -33,6 +27,16 @@
                                 </li>
                             }
                         </ul>
+                    </div>
+                    <div class="card-footer">
+                        <form class="form-group col-md-8" align="left">
+                            <div>
+                                <label class="form-label">Предмет</label>
+                                <input type="text" class="form-control" id="inputLessonName" title="Введите название предмета"/>
+                            </div>
+                            <br/>
+                            <button class="btn btn-primary btn-lg" id="addLessonForTeacher">Добавить</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -32,9 +32,8 @@
                         <td>@teacher.Id</td>
                         <td>@teacher.FullName</td>
                         <td>
-                            <a asp-controller="TeacherAndLesson" asp-action="GetLessons" asp-route-id="@teacher.Id" 
-                               class="btn btn-outline-info" 
-                               title="Посмотреть предметы котрые преподает @teacher.FullName">Открыть</a>
+                            <button class="btn btn-outline-info" onclick="openModal({ url: '@Url.Action("GetTeacher", "TeacherAndLesson")', data: '@teacher.Id' })"
+                                    title="Посмотреть предметы котрые преподает @teacher.FullName">Открыть</button>
                         </td>
                         <td>
                             <div class="row">
@@ -54,8 +53,7 @@
 </div>
 
 @section Scripts
-    {
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{
     <script>
 
         $('#addTeacher').on('click', function (e) {
