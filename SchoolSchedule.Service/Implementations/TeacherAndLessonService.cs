@@ -121,4 +121,43 @@ public class TeacherAndLessonService : ITeacherAndLessonService
             };
         }
     }
+
+    public async Task<IBaseResponse<TeacherWithLessonCountViewModel>> GetTeacherWhoTeachesMostLessons()
+    {
+        try
+        {
+            var teacher = await _teacherAndLessonRepository.GetAll()
+                .GroupBy(x => x.Teacher.FullName)
+                .Select(x => new TeacherWithLessonCountViewModel()
+                {
+                    TeacherName = x.Key,
+                    LessonCount = x.Count()
+                })
+                .OrderByDescending(x=>x.LessonCount)
+                .FirstOrDefaultAsync();
+
+            if (teacher == null)
+            {
+                return new BaseResponse<TeacherWithLessonCountViewModel>()
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Teacher not found"
+                };
+            }
+
+            return new BaseResponse<TeacherWithLessonCountViewModel>
+            {
+                Data = teacher,
+                StatusCode = StatusCode.OK,
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<TeacherWithLessonCountViewModel>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"TeacherAndLessonService.[GetTeacherWhoTeachesMostLessons] => {e.Message}"
+            };
+        }
+    }
 }

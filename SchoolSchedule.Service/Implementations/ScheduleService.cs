@@ -164,4 +164,44 @@ public class ScheduleService : IScheduleService
             };
         }
     }
+
+    public async Task<IBaseResponse<ClassRoomViewModel>> GetRarelyVisitedClassRoom()
+    {
+        try
+        {
+            var classRoom = _scheduleRepository.GetAll()
+                .GroupBy(x => x.TeacherAndLesson.LessonNameNavigation.ClassRoom)
+                .Select(x => new ClassRoomViewModel
+                {
+                    ClassRoom = x.Key,
+                    VisitCount = x.Count()
+                })
+                .OrderBy(x=>x.VisitCount)
+                .ThenBy(x=>x.ClassRoom)
+                .FirstOrDefault();
+
+            if (classRoom == null)
+            {
+                return new BaseResponse<ClassRoomViewModel>
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Classroom not found"
+                };
+            }
+
+            return new BaseResponse<ClassRoomViewModel>
+            {
+                StatusCode = StatusCode.OK,
+                Data = classRoom
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<ClassRoomViewModel>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"[ScheduleService.GetRarelyVisitedClassRoom] => {e.Message}"
+            };
+        }
+    }
 }

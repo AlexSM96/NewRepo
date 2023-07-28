@@ -1,7 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using SchoolSchedule.Domain.ViewModels;
 using SchoolSchedule.Service.Interfaces;
 

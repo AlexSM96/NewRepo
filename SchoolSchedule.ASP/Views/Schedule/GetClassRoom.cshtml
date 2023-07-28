@@ -1,0 +1,28 @@
+﻿@model SchoolSchedule.Domain.ViewModels.ClassRoomViewModel
+@{
+    ViewData["Title"] = "GetClassRoom";
+   
+}
+
+<div class="col-md-12">
+    <div class="card-head form-text" align="center">
+        <h5>Самая редко посещаемая аудитория</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <button class="btn btn-sm">ПН</button>
+            <button class="btn btn-sm">ВТ</button>
+            <button class="btn btn-sm">СР</button>
+            <button class="btn btn-sm">ЧТ</button>
+            <button class="btn btn-sm">ПТ</button>
+            <button class="btn btn-sm">СБ</button>
+        </div>
+        <div class="col-md-12">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item list-group-item-info">Аудитория: <b>@Model.ClassRoom</b></li>
+                <li class="list-group-item list-group-item-info">Кол-во посещений: <b>@Model.VisitCount</b></li>
+            </ul>
+        </div>
+    </div>
+</div>
+

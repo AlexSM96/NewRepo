@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "GetRequest";
+}
+
+<h1 align="center">Отчеты</h1>
+<div class="row" align="center">
+    <div class="card w-50">
+        <div align="center">
+            <div class="card-header">
+                <label class="card-title form-text">Преподаватель который ведет больше всего различных предметов</label>
+            </div>
+            <div class="card-body">
+                <img src="https://cdn4.iconfinder.com/data/icons/modern-education-2/128/71-1024.png"
+                     width="100" height="100" title="Icon">
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info btn-lg" 
+                        onclick="openRequestModal('@Url.Action("GetTeacherWithMostLessons","TeacherAndLesson")')"
+                        title="Найти преподвателя который ведет больше всего предметов">Найти</button>
+            </div>
+        </div>
+    </div>
+    <div class="card w-50">
+        <div align="center">
+            <div class="card-header">
+                <label class="card-title form-text">Найти аудиторию, которая меньше всего используется</label>
+            </div>
+            <div class="card-body">
+                <img src="https://cdn2.iconfinder.com/data/icons/education-flat-icons-part-2/218/Teaching-512.png"
+                     width="100" height="100" title="Icon" />
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info btn-lg"
+                        onclick="openRequestModal('@Url.Action("GetClassRoom","Schedule")')"
+                        title="Найти аудиторию, которая меньше всего используется">Найти</button>
+            </div>
+        </div>
+    </div>
+    <div class="card w-50">
+        <div align="center">
+            <div class="card-header">
+                <label class="card-title form-text">Найти количество уроков за неделю и количество различных учителей</label>
+            </div>
+            <div class="card-body">
+                <img src="https://cdn0.iconfinder.com/data/icons/education-flat-40/32/83_Class_Classroom_Students_Teacher_Teaching-512.png"
+                     width="100" height="100" title="Icon" />
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info btn-lg" id=""
+                        title="Найти количество уроков за неделю и количество различных учителей">Найти</button>
+            </div>
+        </div>
+    </div>
+    <div class="card w-50">
+        <div align="center">
+            <div class="card-header">
+                <label class="card-title form-text">Показать список предметов и учителей</label>
+            </div>
+            <div class="card-body">
+                <img src="https://cdn4.iconfinder.com/data/icons/school-and-education-3-5/128/132-512.png"
+                     width="100" height="100" title="Icon" />
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-info btn-lg" id=""
+                        title="Показать список предметов и учителей для заданной пользователем">Найти</button>
+            </div>
+        </div>
+    </div>
+</div>

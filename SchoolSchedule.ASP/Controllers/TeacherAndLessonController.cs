@@ -47,4 +47,16 @@ public class TeacherAndLessonController : Controller
 
         return BadRequest(new { Description = response.Description });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetTeacherWithMostLessons(bool isJson)
+    {
+        var response = await _service.GetTeacherWhoTeachesMostLessons();
+        if (isJson)
+        {
+            return Json( new { Description = response.Description });
+        }
+
+        return PartialView("GetTeacherWithMostLessons", response.Data);
+    }
 }

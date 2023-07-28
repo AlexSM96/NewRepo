@@ -1,0 +1,18 @@
+﻿@model SchoolSchedule.Domain.ViewModels.TeacherWithLessonCountViewModel
+@{
+    ViewData["Title"] = "GetTeacherWithMostLessons";
+}
+
+<div class="col-md-12">
+    <div class="card-head form-text" align="center">
+        <h5>Преподаватель с самым большим количеством предметов</h5>
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item list-group-item-info">Преподаватель: <b>@Model.TeacherName</b></li>
+                <li class="list-group-item list-group-item-info">Кол-во предметов: <b>@Model.LessonCount</b></li>
+            </ul>
+        </div>
+    </div>
+</div>

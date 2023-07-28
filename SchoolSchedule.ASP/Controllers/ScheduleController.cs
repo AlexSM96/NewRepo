@@ -58,4 +58,15 @@ public class ScheduleController : Controller
 
         return BadRequest(new {Description = response.Description});
     }
+
+    public async Task<IActionResult> GetClassRoom(bool isJson)
+    {
+        var response = await _service.GetRarelyVisitedClassRoom();
+        if (isJson)
+        {
+            return Json(new { Description = response.Description });
+        }
+
+        return PartialView("GetClassRoom", response.Data);
+    }
 }

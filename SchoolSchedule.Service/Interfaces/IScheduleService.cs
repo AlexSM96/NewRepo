@@ -11,4 +11,6 @@ public interface IScheduleService
     public Task<IBaseResponse<ScheduleEditViewModel>> CreateOneDay(ScheduleEditViewModel model);
 
     public Task<IBaseResponse<ScheduleEditViewModel>> DeleteOneDay(ScheduleEditViewModel model);
+
+    public Task<IBaseResponse<ClassRoomViewModel>> GetRarelyVisitedClassRoom();
 }

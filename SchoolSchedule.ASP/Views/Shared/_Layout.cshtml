@@ -30,6 +30,9 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Lesson" asp-action="GetLessons">Предметы</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Request" asp-action="GetRequest">Отчеты</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -44,13 +47,14 @@
         </div>
     </div>
 
-    <div class="modal carousel-fade" id="modal">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Информация</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
-                <div class="modal-body" style="width:contain"></div>
+                <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
                 </div>
@@ -63,6 +67,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/js/modal.js"></script>
+    <script src="~/js/requestModal.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

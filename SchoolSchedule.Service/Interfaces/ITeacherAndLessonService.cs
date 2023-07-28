@@ -8,6 +8,8 @@ public interface ITeacherAndLessonService
 {
     public Task<IBaseResponse<IEnumerable<TeacherAndLesson>>> GetTeacher(int teacherId);
 
+    public Task<IBaseResponse<TeacherWithLessonCountViewModel>> GetTeacherWhoTeachesMostLessons();
+
     public Task<IBaseResponse<TeacherAndLessonViewModel>> CreatePair(TeacherAndLessonViewModel model);
 
     public Task<IBaseResponse<TeacherAndLessonViewModel>> DeletePair(TeacherAndLessonViewModel model);
