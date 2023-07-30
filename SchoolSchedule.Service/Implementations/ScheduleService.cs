@@ -82,7 +82,7 @@ public class ScheduleService : IScheduleService
         }
     }
 
-    public async Task<IBaseResponse<ScheduleEditViewModel>> CreateOneDay(ScheduleEditViewModel model)
+    public async Task<IBaseResponse<ScheduleEditViewModel>> Create(ScheduleEditViewModel model)
     {
         try
         {
@@ -124,13 +124,13 @@ public class ScheduleService : IScheduleService
             return new BaseResponse<ScheduleEditViewModel>
             {
                 StatusCode = StatusCode.ServerError,
-                Description = $"[ScheduleService.CreateOneDay] => {e.Message}"
+                Description = $"[ScheduleService.Create] => {e.Message}"
             };
         }
     }
 
 
-    public async Task<IBaseResponse<ScheduleEditViewModel>> DeleteOneDay(ScheduleEditViewModel model)
+    public async Task<IBaseResponse<ScheduleEditViewModel>> Delete(ScheduleEditViewModel model)
     {
         try
         {
@@ -160,16 +160,17 @@ public class ScheduleService : IScheduleService
             return new BaseResponse<ScheduleEditViewModel>
             {
                 StatusCode = StatusCode.ServerError,
-                Description = $"[ScheduleService.DeleteOneDay] => {e.Message}"
+                Description = $"[ScheduleService.Delete] => {e.Message}"
             };
         }
     }
 
-    public async Task<IBaseResponse<ClassRoomViewModel>> GetRarelyVisitedClassRoom()
+    public async Task<IBaseResponse<ClassRoomViewModel>> GetRarelyVisitedClassRoom(List<string> selectedWeekDays)
     {
         try
         {
             var classRoom = _scheduleRepository.GetAll()
+                .Where(x=> selectedWeekDays.Contains(x.WeekDayNavigation.WeekDayName))
                 .GroupBy(x => x.TeacherAndLesson.LessonNameNavigation.ClassRoom)
                 .Select(x => new ClassRoomViewModel
                 {
@@ -201,6 +202,85 @@ public class ScheduleService : IScheduleService
             {
                 StatusCode = StatusCode.ServerError,
                 Description = $"[ScheduleService.GetRarelyVisitedClassRoom] => {e.Message}"
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<IEnumerable<TeacherAndLessonCountViewModel>>> GetTeacherAndLessonCountByWeek()
+    {
+        try
+        {
+            var request = await _scheduleRepository.GetAll()
+                .GroupBy(x => x.Class.ClassName)
+                .Select(x => new TeacherAndLessonCountViewModel
+                {
+                    ClassName = x.Key,
+                    LessonsCount = x.Select(x => x.LessonName).Count(),
+                    UniqTeachersCount = x.Select(x => x.TeacherId).Distinct().Count()
+                })
+                .ToListAsync();
+
+            if (!request.Any())
+            {
+                return new BaseResponse<IEnumerable<TeacherAndLessonCountViewModel>>()
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Not found"
+                };
+            }
+
+            return new BaseResponse<IEnumerable<TeacherAndLessonCountViewModel>>()
+            {
+                Data = request,
+                StatusCode = StatusCode.OK
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<IEnumerable<TeacherAndLessonCountViewModel>>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"[ScheduleService.GetTeacherAndLessonCountByWeek] => {e.Message}"
+            };
+        }
+    }
+
+    public async Task<IBaseResponse<IEnumerable<ClassAndTeacherViewModel>>> GetTeacherAndLessonByClass(ClassAndTeacherViewModel model)
+    {
+        try
+        {
+            var request = await _scheduleRepository.GetAll()
+                .Where(x => x.Class.ClassName == model.ClassName)
+                .Select(x=> new ClassAndTeacherViewModel
+                {
+                   ClassName = x.Class.ClassName,
+                   LessonName = x.LessonName,
+                   TeacherName = x.TeacherAndLesson.Teacher.FullName
+                })
+                .Distinct()
+                .ToListAsync();
+
+            if (!request.Any())
+            {
+                return new BaseResponse<IEnumerable<ClassAndTeacherViewModel>>
+                {
+                    StatusCode = StatusCode.NotFound,
+                    Description = "Not found"
+                };
+
+            }
+            return new BaseResponse<IEnumerable<ClassAndTeacherViewModel>>
+            {
+                Data = request,
+                StatusCode = StatusCode.OK
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseResponse<IEnumerable<ClassAndTeacherViewModel>>
+            {
+                StatusCode = StatusCode.ServerError,
+                Description = $"[ScheduleService.ClassAndTeacherViewModel] => {e.Message}"
             };
         }
     }

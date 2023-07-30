@@ -33,7 +33,7 @@ public class ClassController : Controller
             return BadRequest(new { Description = response.Description });
         }
 
-        return BadRequest();
+        return BadRequest(ModelState);
     }
 
     [HttpPost]

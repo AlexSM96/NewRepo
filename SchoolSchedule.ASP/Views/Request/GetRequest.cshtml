@@ -7,63 +7,135 @@
     <div class="card w-50">
         <div align="center">
             <div class="card-header">
-                <label class="card-title form-text">Преподаватель который ведет больше всего различных предметов</label>
+                <label class="card-title form-text"><b>Найти преподавателя который ведет больше всего различных предметов</b></label>
             </div>
             <div class="card-body">
                 <img src="https://cdn4.iconfinder.com/data/icons/modern-education-2/128/71-1024.png"
                      width="100" height="100" title="Icon">
             </div>
             <div class="card-footer">
-                <button class="btn btn-info btn-lg" 
+                <button class="btn btn-info btn-lg"
                         onclick="openRequestModal('@Url.Action("GetTeacherWithMostLessons","TeacherAndLesson")')"
-                        title="Найти преподвателя который ведет больше всего предметов">Найти</button>
+                        title="Найти преподвателя который ведет больше всего предметов">
+                    Найти
+                </button>
             </div>
         </div>
     </div>
     <div class="card w-50">
         <div align="center">
             <div class="card-header">
-                <label class="card-title form-text">Найти аудиторию, которая меньше всего используется</label>
+                <label class="card-title form-text"><b>Найти аудиторию, которая меньше всего используется</b></label>
             </div>
             <div class="card-body">
                 <img src="https://cdn2.iconfinder.com/data/icons/education-flat-icons-part-2/218/Teaching-512.png"
                      width="100" height="100" title="Icon" />
+                <fieldset>
+                    <h6 class="accept-policy">Выберите один или несколько дней недели</h6>
+                    <div>
+                        <input id="monday" type="checkbox" value="ПН" name="checkboxe" />
+                        <label for="monday">ПН</label>
+                        <input id="tuesday" type="checkbox" value="ВТ" name="checkboxe" />
+                        <label for="tuesday">ВТ</label>
+                        <input id="wednesday" type="checkbox" value="СР" name="checkboxe" />
+                        <label for="wednesday">СР</label>
+                        <input id="thursday" type="checkbox" value="ЧТ" name="checkboxe" />
+                        <label for="thursday">ЧТ</label>
+                        <input id="friday" type="checkbox" value="ПТ" name="checkboxe" />
+                        <label for="friday">ПТ</label>
+                        <input id="saturday" type="checkbox" value="СБ" name="checkboxe" />
+                        <label for="saturday">СБ</label>
+                    </div>
+                </fieldset>
             </div>
             <div class="card-footer">
-                <button class="btn btn-info btn-lg"
-                        onclick="openRequestModal('@Url.Action("GetClassRoom","Schedule")')"
-                        title="Найти аудиторию, которая меньше всего используется">Найти</button>
+                <button class="btn btn-info btn-lg" id="findClassRoomButton"
+                        onclick="openClassRoomModal()"
+                        title="Найти аудиторию, которая меньше всего используется">
+                    Найти
+                </button>
             </div>
         </div>
     </div>
     <div class="card w-50">
         <div align="center">
             <div class="card-header">
-                <label class="card-title form-text">Найти количество уроков за неделю и количество различных учителей</label>
+                <label class="card-title form-text"><b>Показать количество уроков за неделю и количество различных учителей</b></label>
             </div>
             <div class="card-body">
                 <img src="https://cdn0.iconfinder.com/data/icons/education-flat-40/32/83_Class_Classroom_Students_Teacher_Teaching-512.png"
                      width="100" height="100" title="Icon" />
             </div>
             <div class="card-footer">
-                <button class="btn btn-info btn-lg" id=""
-                        title="Найти количество уроков за неделю и количество различных учителей">Найти</button>
+                <button class="btn btn-info btn-lg"
+                        onclick="openRequestModal('@Url.Action("GetTeacherAndLessonCountByWeek","Schedule")')"
+                        title="Найти количество уроков за неделю и количество различных учителей">
+                    Найти
+                </button>
             </div>
         </div>
     </div>
     <div class="card w-50">
         <div align="center">
             <div class="card-header">
-                <label class="card-title form-text">Показать список предметов и учителей</label>
+                <label class="card-title form-text"><b>Показать список предметов и учителей</b></label>
             </div>
             <div class="card-body">
                 <img src="https://cdn4.iconfinder.com/data/icons/school-and-education-3-5/128/132-512.png"
                      width="100" height="100" title="Icon" />
             </div>
             <div class="card-footer">
-                <button class="btn btn-info btn-lg" id=""
-                        title="Показать список предметов и учителей для заданной пользователем">Найти</button>
+                <button class="btn btn-info btn-lg"
+                        title="Показать список предметов и учителей для заданной пользователем">
+                    Найти
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts
+    {
+    <script>
+        let selectedWeekDays = [];
+
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        if (selectedWeekDays.length == 0) {
+            document.getElementById('findClassRoomButton').disabled = true;
+        }
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener('change', () => {
+                if (!checkboxes[i].checked) {
+                    document.getElementById('findClassRoomButton').disabled = true;
+                }else {
+                    document.getElementById('findClassRoomButton').disabled = false;
+                }
+            });
+        }
+
+        function openClassRoomModal() {
+            let modal = $('#modal');
+            $('input[name="checkboxe"]:checked').each(function () {
+                selectedWeekDays.push($(this).val());
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetClassRoom","Schedule")',
+                data: { selectedWeekDays },
+                success: function (response) {
+                    modal.find('.modal-body').html(response);
+                    modal.modal('show');
+                },
+                error: function (response) {
+                    modal.modal('hide');
+                    alert(response.responseText);
+                }
+            });
+            selectedWeekDays.splice(0, selectedWeekDays.length);
+        }
+
+    </script>
+}

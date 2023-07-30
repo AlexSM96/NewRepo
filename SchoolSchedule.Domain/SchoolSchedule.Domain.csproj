@@ -10,7 +10,6 @@
     <Folder Include="Enum\" />
     <Folder Include="Extensions\" />
     <Folder Include="Filters\Schedule\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Response\" />
   </ItemGroup>
 

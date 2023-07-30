@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SchoolSchedule.Domain.ViewModels.TeacherAndLessonCountViewModel>
+@{
+    ViewData["Title"] = "GetTeacherAndLessonCountByWeek";
+}
+
+<div class="col-md-12">
+    <div class="card-head form-text" align="center">
+        <h5>Кол-во предметов и преподвателей за неделю для каждого класса</h5>
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <table class="table table-success">
+                <thead align="center">
+                    <tr>
+                        <th>Класс</th>
+                        <th>Кол-во уроков</th>
+                        <th>Кол-во преподвателей</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr align="center">
+                            <td>@item.ClassName</td>
+                            <td>@item.LessonsCount</td>
+                            <td>@item.UniqTeachersCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

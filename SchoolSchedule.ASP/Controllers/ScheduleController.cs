@@ -38,19 +38,24 @@ public class ScheduleController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateSchedule(ScheduleEditViewModel model)
     {
-        var response = await _service.CreateOneDay(model);
-        if (response.StatusCode == Domain.Enum.StatusCode.OK)
+        if (ModelState.IsValid)
         {
-            return Ok(new { Description = response.Description });
+            var response = await _service.Create(model);
+            if (response.StatusCode == Domain.Enum.StatusCode.OK)
+            {
+                return Ok(new { Description = response.Description });
+            }
+
+            return BadRequest(new { Description = response.Description });
         }
 
-        return BadRequest(new {Description = response.Description});
+        return BadRequest(ModelState);
     }
 
     [HttpPost]
     public async Task<IActionResult> RemoveSchedule(ScheduleEditViewModel model)
     {
-        var response = await _service.DeleteOneDay(model);
+        var response = await _service.Delete(model);
         if (response.StatusCode == Domain.Enum.StatusCode.OK)
         {
             return Ok(new { Description = response.Description });
@@ -59,14 +64,26 @@ public class ScheduleController : Controller
         return BadRequest(new {Description = response.Description});
     }
 
-    public async Task<IActionResult> GetClassRoom(bool isJson)
+    public async Task<IActionResult> GetClassRoom(List<string> selectedWeekDays, bool isJson)
     {
-        var response = await _service.GetRarelyVisitedClassRoom();
+        var response = await _service.GetRarelyVisitedClassRoom(selectedWeekDays);
         if (isJson)
         {
             return Json(new { Description = response.Description });
         }
 
         return PartialView("GetClassRoom", response.Data);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetTeacherAndLessonCountByWeek(bool isJson)
+    {
+        var response = await _service.GetTeacherAndLessonCountByWeek();
+        if (isJson)
+        {
+            return Json(new { Description = response.Description });
+        }
+
+        return PartialView("GetTeacherAndLessonCountByWeek", response.Data);
     }
 }

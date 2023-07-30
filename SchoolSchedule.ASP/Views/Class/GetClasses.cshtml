@@ -5,14 +5,15 @@
 
 <h1 align="center">Классы</h1>
 <br />
+
 <div class="row">
     <br />
     <form class="form-group col-md-6">
         <div>
             <label class="form-label">Номер класса</label>
-            <input type="text" class="form-control" id="inputData"/>
+            <input type="text" class="form-control" id="inputData" />
         </div>
-        <br />
+        <br/>
         <button class="btn btn-primary btn-lg" id="addClass">Добавить</button>
     </form>
 
@@ -67,11 +68,11 @@
                     className: $('#inputData').val()
                 },
                 success: function (response) {
-                    alert(response.description);
-                    location.reload();
+                   alert(response.description);
+                   location.reload();
                 },
                 error: function (response) {
-                    alert(response.responseJSON.description);
+                   alert(response.responseText);
                 }
             })
         });
