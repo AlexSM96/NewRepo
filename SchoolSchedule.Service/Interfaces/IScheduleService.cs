@@ -16,5 +16,5 @@ public interface IScheduleService
 
     public Task<IBaseResponse<IEnumerable<TeacherAndLessonCountViewModel>>> GetTeacherAndLessonCountByWeek();
 
-    public Task<IBaseResponse<IEnumerable<ClassAndTeacherViewModel>>> GetTeacherAndLessonByClass(ClassAndTeacherViewModel model);
+    public Task<IBaseResponse<IEnumerable<ClassAndTeacherViewModel>>> GetTeacherAndLessonByClass(string className);
 }

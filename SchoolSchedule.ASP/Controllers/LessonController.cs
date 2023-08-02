@@ -23,19 +23,15 @@ public class LessonController : Controller
     [HttpPost]
     public async Task<IActionResult> AddLesson(LessonViewModel model)
     {
-        if (ModelState.IsValid)
-        {
-            var response = await _service.AddLesson(model);
-            if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
-                return Ok(new { Description = response.Description });
-            }
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return BadRequest(new { Description = response.Description });
+        var response = await _service.AddLesson(model);
+        if (response.StatusCode == Domain.Enum.StatusCode.OK)
+        {
+            return Ok(new { Description = response.Description });
         }
 
-        return BadRequest(ModelState);
-        
+        return BadRequest(new { Description = response.Description });
     }
 
     [HttpPost]

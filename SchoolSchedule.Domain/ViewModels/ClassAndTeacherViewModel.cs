@@ -1,4 +1,6 @@
-﻿namespace SchoolSchedule.Domain.ViewModels;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SchoolSchedule.Domain.ViewModels;
 
 public class ClassAndTeacherViewModel
 {
@@ -7,6 +9,4 @@ public class ClassAndTeacherViewModel
     public string LessonName { get; set; }
 
     public string TeacherName { get; set; }
-
-
 }

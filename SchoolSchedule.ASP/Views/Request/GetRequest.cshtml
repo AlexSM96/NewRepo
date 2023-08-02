@@ -1,8 +1,10 @@
-﻿@{
+﻿@model IEnumerable<SchoolSchedule.DAL.Entities.Class>
+@{
     ViewData["Title"] = "GetRequest";
 }
 
 <h1 align="center">Отчеты</h1>
+<br/>
 <div class="row" align="center">
     <div class="card w-50">
         <div align="center">
@@ -13,6 +15,7 @@
                 <img src="https://cdn4.iconfinder.com/data/icons/modern-education-2/128/71-1024.png"
                      width="100" height="100" title="Icon">
             </div>
+            <br /> <br />
             <div class="card-footer">
                 <button class="btn btn-info btn-lg"
                         onclick="openRequestModal('@Url.Action("GetTeacherWithMostLessons","TeacherAndLesson")')"
@@ -66,6 +69,7 @@
                 <img src="https://cdn0.iconfinder.com/data/icons/education-flat-40/32/83_Class_Classroom_Students_Teacher_Teaching-512.png"
                      width="100" height="100" title="Icon" />
             </div>
+            <br /> <br />
             <div class="card-footer">
                 <button class="btn btn-info btn-lg"
                         onclick="openRequestModal('@Url.Action("GetTeacherAndLessonCountByWeek","Schedule")')"
@@ -83,9 +87,17 @@
             <div class="card-body">
                 <img src="https://cdn4.iconfinder.com/data/icons/school-and-education-3-5/128/132-512.png"
                      width="100" height="100" title="Icon" />
+                <h6 class="accept-policy">Выберете класс</h6>
+                <select class="form-control" id="classNameSelector">
+                    @foreach (var item in Model)
+                    {
+                        <option>@item.ClassName</option>
+                    }
+                </select>
             </div>
             <div class="card-footer">
                 <button class="btn btn-info btn-lg"
+                        onclick="openTeacherAndLessonModal()"
                         title="Показать список предметов и учителей для заданной пользователем">
                     Найти
                 </button>
@@ -98,7 +110,7 @@
     {
     <script>
         let selectedWeekDays = [];
-
+        let modal = $('#modal');
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
         if (selectedWeekDays.length == 0) {
@@ -116,7 +128,6 @@
         }
 
         function openClassRoomModal() {
-            let modal = $('#modal');
             $('input[name="checkboxe"]:checked').each(function () {
                 selectedWeekDays.push($(this).val());
             });
@@ -136,6 +147,23 @@
             });
             selectedWeekDays.splice(0, selectedWeekDays.length);
         }
+
+        function openTeacherAndLessonModal(){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetTeacherAndLessonByClass","Schedule")',
+                data: { className: $('#classNameSelector option:selected').val() },
+                success: function(response){
+                    modal.find('.modal-body').html(response);
+                    modal.modal('show');
+                },
+                error: function(resposne){
+                    modal.modal('hide');
+                    alert(response.responseText);
+                }
+            })
+        }
+
 
     </script>
 }

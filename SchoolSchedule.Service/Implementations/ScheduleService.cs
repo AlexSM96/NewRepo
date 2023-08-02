@@ -245,12 +245,12 @@ public class ScheduleService : IScheduleService
         }
     }
 
-    public async Task<IBaseResponse<IEnumerable<ClassAndTeacherViewModel>>> GetTeacherAndLessonByClass(ClassAndTeacherViewModel model)
+    public async Task<IBaseResponse<IEnumerable<ClassAndTeacherViewModel>>> GetTeacherAndLessonByClass(string className)
     {
         try
         {
             var request = await _scheduleRepository.GetAll()
-                .Where(x => x.Class.ClassName == model.ClassName)
+                .Where(x => x.Class.ClassName.Contains(className))
                 .Select(x=> new ClassAndTeacherViewModel
                 {
                    ClassName = x.Class.ClassName,
@@ -267,8 +267,8 @@ public class ScheduleService : IScheduleService
                     StatusCode = StatusCode.NotFound,
                     Description = "Not found"
                 };
-
             }
+
             return new BaseResponse<IEnumerable<ClassAndTeacherViewModel>>
             {
                 Data = request,

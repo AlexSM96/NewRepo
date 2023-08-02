@@ -5,60 +5,92 @@
 }
 
 <h3 align="center">Расписание - "@Model.ClassName"</h3>
-<br/>
+<br />
+
 <div class="col-md-12" align="center">
-    <table class="table table-dark table-hover">
+    <table class="table table-dark table-hover" id="myTable">
         <thead>
-        <tr align="center">
-            <th>День недели</th>
-            <th>Номер урока</th>
-            <th>Время начала</th>
-            <th>Время окончания</th>
-            <th>Предмет</th>
-            <th>Преподаватель</th>
-            <th>Аудитория</th>
-            <th>Действие</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.Schedules)
-        {
             <tr align="center">
-                <td>@item.WeekDayNavigation?.WeekDayName</td>
-                <td>@item.LessonNumber</td>
-                <td>@item.LessonNumberNavigation?.LessonTimeStart</td>
-                <td>@item.LessonNumberNavigation?.LessonTimeEnd</td>
-                <td>@item.LessonName</td>
-                <td>@item.TeacherAndLesson?.Teacher?.FullName</td>
-                <td>@item.TeacherAndLesson?.LessonNameNavigation?.ClassRoom</td>
-                <td>
-                    <div class="col-md-12">
-                        <button class="btn btn-outline-danger" 
-                                onclick="deleteSchedule('@item.WeekDay','@item.ClassId','@item.LessonNumber','@item.TeacherId','@item.LessonName')" 
-                                title="Удалить ряд">Удалить</button>
-                    </div>
-                </td>
+                <th>День недели</th>
+                <th>Номер урока</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+                <th>Предмет</th>
+                <th>Преподаватель</th>
+                <th>Аудитория</th>
+                <th>Действие</th>
             </tr>
-            countRow++;
-        }
-        @{
-            if (countRow < 36)
+        </thead>
+        <tbody id="tableBody">
+            @foreach (var item in Model.Schedules)
             {
                 <tr align="center">
-                    <th colspan="8">
-                            <button class="btn btn-primary btn-lg" onclick="openDialog()" title="Добавить новые данные">Добавить</button>
-                    </th>
+                    <td>@item.WeekDayNavigation?.WeekDayName</td>
+                    <td>@item.LessonNumber</td>
+                    <td>@item.LessonNumberNavigation?.LessonTimeStart</td>
+                    <td>@item.LessonNumberNavigation?.LessonTimeEnd</td>
+                    <td>@item.LessonName</td>
+                    <td>@item.TeacherAndLesson?.Teacher?.FullName</td>
+                    <td>@item.TeacherAndLesson?.LessonNameNavigation?.ClassRoom</td>
+                    <td>
+                        <div class="col-md-12">
+                            <button class="btn btn-outline-danger"
+                                    onclick="deleteSchedule('@item.WeekDay','@item.ClassId','@item.LessonNumber','@item.TeacherId','@item.LessonName')"
+                                    title="Удалить ряд">
+                                Удалить
+                            </button>
+                        </div>
+                    </td>
                 </tr>
+                countRow++;
             }
-        }
+            @{
+                if (countRow < 36)
+                {
+                    <tr align="center">
+                        <td>
+                            <select class="form-control" id="weekDaySelector">
+                                <option>ПН</option>
+                                <option>ВТ</option>
+                                <option>СР</option>
+                                <option>ЧТ</option>
+                                <option>ПТ</option>
+                                <option>СБ</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="lessonNumberSelector">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input class="form-control" id="lessnNameInput" />
+                        </td>
+                        <td>
+                            <input class="form-control" id="teacherNameInput" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <button class="btn btn-primary" title="Добавить новые данные" id="addScheduleButton">Добавить</button>
+                        </td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 </div>
 
 @section Scripts
-{
+    {
     <script>
-        function deleteSchedule(weekDay,classId,lessonNumber,teacherId,lessonName) {
+        function deleteSchedule(weekDay, classId, lessonNumber, teacherId, lessonName) {
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("RemoveSchedule","Schedule")',
@@ -69,65 +101,37 @@
                     teacherId,
                     lessonName
                 },
-                success: function(response) {
+                success: function (response) {
                     alert(response.description);
                     location.reload();
                 },
-                error: function(response) {
-                    alert(response.responseJSON.description);
+                error: function (response) {
+                    alert(response.responseText);
                 }
             });
         }
-        
-        function openDialog(){
-            scheduleDialog.dialog('open');
-        }
 
-        let scheduleDialog = $(`<div id="dialog" title="Добавить расписание">
-                                  <form class="form-group col-md-6">
-                                    <label class="form-label" for="weekDay">День недели</label>
-                                    <input class="form-control" type="text" id="weekDay">
-                                    <br/>
-                                    <label class="form-label" for="lessonNumber">Номер урока</label>
-                                    <input class="form-control" type="text" id="lessonNumber">
-                                    <br/>
-                                    <label class="form-label" for="teacherName">Преподаватель</label>
-                                    <input class="form-control" type="text" id="teacherName">
-                                    <br/>
-                                    <label class="form-label" for="lessonName">Предмет</label>
-                                    <input class="form-control" type="text" id="lessonName">
-                                  </form>
-                                </div>`).dialog({
-            autoOpen: false,
-            modal: true,
-            width: 600,
-            buttons: {
-                "Сохранить": function() {
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("CreateSchedule","Schedule")',
-                        data: {
-                            weekDayName: $('#weekDay').val(),
-                            classId: '@Model.ClassId',
-                            lessonNumber: $('#lessonNumber').val(),
-                            teacherName: $('#teacherName').val(),
-                            lessonName: $('#lessonName').val()
-                        },
-                        success: function (response) {
-                            alert(response.description);
-                            location.reload();
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                    $(this).dialog("close");
+        $('#addScheduleButton').on('click', function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateSchedule","Schedule")',
+                data: {
+                    weekDayName: $('#weekDaySelector option:selected').val(),
+                    lessonNumber: $('#lessonNumberSelector option:selected').val(),
+                    classId: '@Model.ClassId',
+                    lessonName: $('#lessnNameInput').val(),
+                    teacherName: $('#teacherNameInput').val()
                 },
-                "Отмена": function() {
-                    $(this).dialog("close");
+                success: function (response) {
+                    alert(response.description);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseText);
                 }
-            }
+            })
         });
+
+
     </script>
 }
-

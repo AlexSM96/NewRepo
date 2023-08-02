@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-    @* <link rel="stylesheet" href="~/SchoolSchedule.ASP.NET.styles.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
@@ -47,7 +46,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -64,10 +63,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/js/modal.js"></script>
     <script src="~/js/requestModal.js"></script>
+    <script src="~/js/drawTable.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

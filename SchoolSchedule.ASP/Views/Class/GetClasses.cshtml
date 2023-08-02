@@ -5,7 +5,6 @@
 
 <h1 align="center">Классы</h1>
 <br />
-
 <div class="row">
     <br />
     <form class="form-group col-md-6">
@@ -22,39 +21,42 @@
     <div class="form-group col-md-6">
         <table class="table table-striped table-dark" id="classTable">
             <thead>
-                <tr align="center">
-                    <th>ID</th>
-                    <th>Класс</th>
-                    <th>Расписание</th>
-                    <th>Действие</th>
-                </tr>
+            <tr align="center">
+                <th>ID</th>
+                <th>Класс</th>
+                <th>Расписание</th>
+                <th>Действие</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr align="center">
-                        <td>@item.ClassId</td>
-                        <td>"@item.ClassName"</td>
-                        <td>
-                            <a asp-controller="Class" asp-action="GetSchedule" asp-route-classId="@item.ClassId" class="btn btn-outline-info" title="Открыть расписание">Открыть расписание</a>
-                        </td>
-                        <td>
-                            <div class="row col-md-10">
-                                <div class="form-group col-md-7">
-                                    <button class="btn btn-outline-warning" onclick="openDialog()">Изменить</button>
-                                </div>
-                                <div class="form-group col-md-5">
-                                    <button class="btn btn-outline-danger" onclick="deleteClass(@item.ClassId)">Удалить</button>
-                                </div>
+            @foreach (var item in Model)
+            {
+                <tr align="center">
+                    <td>@item.ClassId</td>
+                    <td>"@item.ClassName"</td>
+                    <td>
+                        <a asp-controller="Class" asp-action="GetSchedule" asp-route-classId="@item.ClassId" 
+                           class="btn btn-outline-info"
+                           title="Открыть расписание">Открыть расписание</a>
+                    </td>
+                    <td>
+                        <div class="row col-md-10">
+                            <div class="form-group col-md-7">
+                                <button class="btn btn-outline-warning"
+                                        onclick="openTeacherDialog()">Изменить</button>
                             </div>
-                        </td>
-                    </tr>
-                }
+                            <div class="form-group col-md-5">
+                                <button class="btn btn-outline-danger" 
+                                        onclick="deleteClass(@item.ClassId)">Удалить</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
 </div>
-
 
 @section Scripts
 {
@@ -92,19 +94,19 @@
             });
         }
 
-        function openDialog() {
+        function openTeacherDialog() {
             teacherDialog.dialog('open');
         }
 
         let teacherDialog = $(`<div id="dialog" title="Редактор названия">
-                                          <form class="form-group col-md-6">
-                                            <label class="form-label" for="currentId">Введите текщий ID</label>
-                                            <input class="form-control" type="text" id="currentId">
-                                            <br/>
-                                            <label class="form-label" for="newClassName">Введите новое название класса</label>
-                                            <input class="form-control" type="text" id="newClassName">
-                                          </form>
-                                        </div>`).dialog({
+                                 <form class="form-group col-md-6">
+                                    <label class="form-label" for="currentId">Введите текщий ID</label>
+                                    <input class="form-control" type="text" id="currentId">
+                                    <br/>
+                                    <label class="form-label" for="newClassName">Введите новое название класса</label>
+                                    <input class="form-control" type="text" id="newClassName">
+                                 </form>
+                              </div>`).dialog({
             autoOpen: false,
             modal: true,
             width: 600,

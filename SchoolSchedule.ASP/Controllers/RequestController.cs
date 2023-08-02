@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolSchedule.Service.Interfaces;
 
 namespace SchoolSchedule.ASP.Controllers
 {
     public class RequestController : Controller
     {
-        public IActionResult GetRequest()
+        private readonly IClassService _service;
+        public RequestController(IClassService service)
         {
-           return View();
+            _service = service;
+        }
+
+        public async Task<IActionResult> GetRequest()
+        {
+            var response = await _service.GetClasses();
+            return View(response.Data);
         }
     }
 }

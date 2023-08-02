@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SchoolSchedule.Domain.ViewModels.ClassAndTeacherViewModel>
+@{
+    ViewData["Title"] = "GetTeacherAndLessonByClass";
+    var className = @Model.Select(x => x.ClassName).FirstOrDefault();
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-body">
+            <h6>Список преподавателей и предметов для - @className</h6>
+            <table class="table table-success">
+                <thead>
+                <tr align="center">
+                    <th>Преподаватели</th>
+                    <th>Предметы</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr align="center">
+                        <td>@item.TeacherName</td>
+                        <td>@item.LessonName</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -38,18 +38,13 @@ public class ScheduleController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateSchedule(ScheduleEditViewModel model)
     {
-        if (ModelState.IsValid)
+        var response = await _service.Create(model);
+        if (response.StatusCode == Domain.Enum.StatusCode.OK)
         {
-            var response = await _service.Create(model);
-            if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
-                return Ok(new { Description = response.Description });
-            }
-
-            return BadRequest(new { Description = response.Description });
+            return Ok(new { Description = response.Description });
         }
 
-        return BadRequest(ModelState);
+        return BadRequest(new { Description = response.Description });
     }
 
     [HttpPost]
@@ -85,5 +80,16 @@ public class ScheduleController : Controller
         }
 
         return PartialView("GetTeacherAndLessonCountByWeek", response.Data);
+    }
+
+    public async Task<IActionResult> GetTeacherAndLessonByClass(string className, bool isJson)
+    {
+        var response = await _service.GetTeacherAndLessonByClass(className);
+        if (isJson)
+        {
+            return Json(new { Description = response.Description });
+        }
+
+        return PartialView("GetTeacherAndLessonByClass", response.Data);
     }
 }

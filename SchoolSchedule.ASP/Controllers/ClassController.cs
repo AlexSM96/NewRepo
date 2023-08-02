@@ -23,17 +23,15 @@ public class ClassController : Controller
     [HttpPost]
     public async Task<IActionResult> AddClass(ClassViewModel model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var response = await _service.AddClass(model);
+        if (response.StatusCode == Domain.Enum.StatusCode.OK)
         {
-            var response = await _service.AddClass(model);
-            if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
-                return Ok(new { Description = response.Description });
-            }
-            return BadRequest(new { Description = response.Description });
+            return Ok(new { Description = response.Description });
         }
 
-        return BadRequest(ModelState);
+        return BadRequest(new { Description = response.Description });
     }
 
     [HttpPost]
