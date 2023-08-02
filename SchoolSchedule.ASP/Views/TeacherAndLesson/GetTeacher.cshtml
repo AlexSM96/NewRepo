@@ -22,7 +22,10 @@
                                 <li class="list-group-item list-group-item-info">
                                     <div class="row">
                                         <div class="col-md-6">@item.LessonName</div>
-                                        <div class="col-md-6"><button class="btn btn-outline-danger" onclick="deletePair('@teacherId', '@item.LessonName')">Удалить</button></div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-outline-danger" 
+                                                    onclick="deletePair({url:'@Url.Action("DeletePair")', teacherId: '@item.TeacherId', lessonName: '@item.LessonName'})">Удалить</button>
+                                        </div>
                                     </div>
                                 </li>
                             }
@@ -35,7 +38,10 @@
                                 <input type="text" class="form-control" id="inputLessonName" title="Введите название предмета"/>
                             </div>
                             <br/>
-                            <button class="btn btn-primary btn-lg" id="addLessonForTeacher">Добавить</button>
+                            <button class="btn btn-primary btn-lg" 
+                                    onclick="createPair({url:'@Url.Action("CreatePair")',teacherId: '@teacherId', lessonName: $('#inputLessonName').val() })">
+                                Добавить
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -43,48 +49,6 @@
         </div>
     </div>
 </div>
-
-@section Scripts
-{
-    <script>
-        $('#addLessonForTeacher').on('click', function(){
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CreatePair")',
-                data: {
-                    teacherId: @teacherId,
-                    lessonName: $('#inputLessonName').val()
-                },
-                success: function(response) {
-                    alert(response.description);
-                    location.reload();
-                },
-                error: function(response) {
-                    alert(response.responseJSON.description);
-                }
-            })
-        });
-
-        function deletePair(teacherId, lessonName) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("DeletePair")',
-                data: {
-                    teacherId,
-                    lessonName
-                },
-                success: function(response) {
-                    alert(response.description);
-                    location.reload();
-                },
-                error: function(response) {
-                    alert(response.responseJSON.description);
-                }
-            })
-        }
-    </script>
-}
-
 
 
 
